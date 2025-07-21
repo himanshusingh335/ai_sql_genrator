@@ -1,0 +1,42 @@
+parse_question:
+  description: >
+    Convert the following user question into a schema-aware SQLite SQL query: {question}
+  expected_output: >
+    A syntactically correct and schema-aware SQLite SQL query referencing either budget_tracker or budget_set table.
+  agent: question_parser
+
+validate_sql:
+  description: >
+    Validate the SQL syntax and schema for correctness using the SQLiteQueryTool.
+  expected_output: >
+    A verified SQL query that is ready to be executed, or a detailed validation error if invalid.
+  agent: sql_validator
+
+execute_query:
+  description: >
+    Execute the validated SQL query against the SQLite database using the SQLiteQueryTool.
+  expected_output: >
+    The raw result of the query execution or an error message if it fails.
+  agent: query_executor
+
+handle_query_error:
+  description: >
+    Fix SQL errors from failed execution. If no error is detected, skip this task.
+  expected_output: >
+    A corrected version of the SQL query that resolves the previous failure.
+  agent: error_handler
+
+reexecute_corrected_sql:
+  description: >
+    Re-run the corrected SQL query against the database.
+  expected_output: >
+    The result of executing the fixed SQL query.
+  agent: query_executor
+
+summarize_answer:
+  description: >
+    Summarize the SQL result into a human-readable answer that aligns with the original question.
+  expected_output: >
+    A natural language explanation of the result using currency formatting and relevant insights.
+  agent: answer_synthesizer
+  output_file: final_answer.md

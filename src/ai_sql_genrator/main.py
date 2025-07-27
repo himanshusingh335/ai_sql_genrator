@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 import sys
 import warnings
-
 from datetime import datetime
-
+from flask import Flask, request, jsonify
 from ai_sql_genrator.crew import AiSqlGenrator
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
+
+# Initialize Flask app
+app = Flask(__name__)
 
 # This main file is intended to be a way for you to run your
 # crew locally, so refrain from adding unnecessary logic into this file.
@@ -15,54 +17,23 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
 def run():
     """
-    Run the crew.
+    Run the Flask server so it works with crewai run.
     """
-    question=""
-    inputs = {
-        'question': input(question)
-    }
-    
+    app.run(host='0.0.0.0', port=5001)
+
+
+# Flask route to handle POST requests
+@app.route('/run', methods=['POST'])
+def run_api():
+    data = request.get_json()
+    if not data or 'question' not in data:
+        return jsonify({'error': 'Missing "question" in request body'}), 400
+
     try:
-        AiSqlGenrator().crew().kickoff(inputs=inputs)
+        AiSqlGenrator().crew().kickoff(inputs={'question': data['question']})
+        # Read and return the content from final_answer.md
+        with open("final_answer.md", "r", encoding="utf-8") as f:
+            answer = f.read()
+        return jsonify({'status': 'success', 'answer': answer}), 200
     except Exception as e:
-        raise Exception(f"An error occurred while running the crew: {e}")
-
-
-def train():
-    """
-    Train the crew for a given number of iterations.
-    """
-    inputs = {
-        "topic": "AI LLMs",
-        'current_year': str(datetime.now().year)
-    }
-    try:
-        AiSqlGenrator().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
-
-    except Exception as e:
-        raise Exception(f"An error occurred while training the crew: {e}")
-
-def replay():
-    """
-    Replay the crew execution from a specific task.
-    """
-    try:
-        AiSqlGenrator().crew().replay(task_id=sys.argv[1])
-
-    except Exception as e:
-        raise Exception(f"An error occurred while replaying the crew: {e}")
-
-def test():
-    """
-    Test the crew execution and returns the results.
-    """
-    inputs = {
-        "topic": "AI LLMs",
-        "current_year": str(datetime.now().year)
-    }
-    
-    try:
-        AiSqlGenrator().crew().test(n_iterations=int(sys.argv[1]), eval_llm=sys.argv[2], inputs=inputs)
-
-    except Exception as e:
-        raise Exception(f"An error occurred while testing the crew: {e}")
+        return jsonify({'error': str(e)}), 500

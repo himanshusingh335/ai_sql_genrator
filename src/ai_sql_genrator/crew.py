@@ -29,21 +29,6 @@ class AiSqlGenrator():
         )
 
     @agent
-    def query_executor(self) -> Agent:
-        return Agent(
-            config=self.agents_config['query_executor'],
-            tools=[SQLiteQueryTool()],
-            verbose=True
-        )
-
-    @agent
-    def error_handler(self) -> Agent:
-        return Agent(
-            config=self.agents_config['error_handler'],
-            verbose=True
-        )
-
-    @agent
     def answer_synthesizer(self) -> Agent:
         return Agent(
             config=self.agents_config['answer_synthesizer'],
@@ -61,24 +46,6 @@ class AiSqlGenrator():
     def validate_sql(self) -> Task:
         return Task(
             config=self.tasks_config['validate_sql']
-        )
-
-    @task
-    def execute_query(self) -> Task:
-        return Task(
-            config=self.tasks_config['execute_query']
-        )
-
-    @task
-    def handle_query_error(self) -> Task:
-        return Task(
-            config=self.tasks_config['handle_query_error']
-        )
-
-    @task
-    def reexecute_corrected_sql(self) -> Task:
-        return Task(
-            config=self.tasks_config['reexecute_corrected_sql']
         )
 
     @task

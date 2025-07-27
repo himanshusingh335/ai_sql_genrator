@@ -7,6 +7,8 @@ from ai_sql_genrator.crew import AiSqlGenrator
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
+isProduction = False  # Change to False to run in terminal
+
 # Initialize Flask app
 app = Flask(__name__)
 
@@ -17,9 +19,13 @@ app = Flask(__name__)
 
 def run():
     """
-    Run the Flask server so it works with crewai run.
+    Run the Flask server or terminal-based output depending on isProduction.
     """
-    app.run(host='0.0.0.0', port=5001)
+    if isProduction:
+        app.run(host='0.0.0.0', port=5001)
+    else:
+        question = input("Enter your question: ")
+        AiSqlGenrator().crew().kickoff(inputs={'question': question})
 
 
 # Flask route to handle POST requests

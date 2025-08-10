@@ -3,6 +3,7 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 
+from ai_sql_genrator.tools.current_date_tool import CurrentDateTool
 from ai_sql_genrator.tools.custom_tool import SQLiteQueryTool
 
 @CrewBase
@@ -17,6 +18,7 @@ class AiSqlGenrator():
     def question_parser(self) -> Agent:
         return Agent(
             config=self.agents_config['question_parser'],
+            tools=[CurrentDateTool()],
             verbose=True
         )
 

@@ -14,7 +14,7 @@ sql_parser_validator:
       2. Parse natural language to SQLite SQL - break complex questions into multiple queries if needed
       3. Validate syntax and execute using SQLiteQueryTool
       4. Fix errors and retry - if query fails after multiple attempts, return the error
-      5. Return query results or final error
+      5. Return query results or final error along with the executed SQL query.
       
       Leverage CurrentDateTool for time-based queries and filters.
     backstory: >

@@ -54,5 +54,5 @@ class AiSqlGenrator():
             tasks=self.tasks,    # Automatically includes all decorated tasks
             process=Process.sequential,
             verbose=True,
-            #planning=True
+            planning=True
         )

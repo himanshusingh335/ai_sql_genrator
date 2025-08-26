@@ -5,6 +5,7 @@ from typing import List
 
 from ai_sql_genrator.tools.current_date_tool import CurrentDateTool
 from ai_sql_genrator.tools.custom_tool import SQLiteQueryTool
+from ai_sql_genrator.tools.db_schema_reader_tool import DatabaseSchemaTool
 
 @CrewBase
 class AiSqlGenrator():
@@ -15,18 +16,10 @@ class AiSqlGenrator():
 
     # Agent Definitions
     @agent
-    def question_parser(self) -> Agent:
+    def sql_parser_validator(self) -> Agent:
         return Agent(
-            config=self.agents_config['question_parser'],
-            tools=[CurrentDateTool()],
-            verbose=True
-        )
-
-    @agent
-    def sql_validator(self) -> Agent:
-        return Agent(
-            config=self.agents_config['sql_validator'],
-            tools=[SQLiteQueryTool()],
+            config=self.agents_config['sql_parser_validator'],
+            tools=[CurrentDateTool(), SQLiteQueryTool(), DatabaseSchemaTool()],
             verbose=True
         )
 
@@ -39,15 +32,9 @@ class AiSqlGenrator():
 
     # Task Definitions
     @task
-    def parse_question(self) -> Task:
+    def parse_and_validate_sql(self) -> Task:
         return Task(
-            config=self.tasks_config['parse_question']
-        )
-
-    @task
-    def validate_sql(self) -> Task:
-        return Task(
-            config=self.tasks_config['validate_sql']
+            config=self.tasks_config['parse_and_validate_sql']
         )
 
     @task
@@ -67,5 +54,5 @@ class AiSqlGenrator():
             tasks=self.tasks,    # Automatically includes all decorated tasks
             process=Process.sequential,
             verbose=True,
-            planning=True
+            #planning=True
         )

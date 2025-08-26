@@ -1,21 +1,15 @@
-parse_question:
+parse_and_validate_sql:
   description: >
-    Convert the following user question into schema-aware SQLite SQL query. In case answering the question with one sql query alone is complex, break it down into multiple sql queries, this is the question: {question}
+    Convert the user question into schema-aware SQLite SQL queries and validate them for correctness.
+    Question: {question}
   expected_output: >
-    one or more syntactically correct and schema-aware SQLite SQL query referencing either budget_tracker or budget_set table.
-  agent: question_parser
-
-validate_sql:
-  description: >
-    Validate all the SQL query syntax and schema for correctness using the SQLiteQueryTool. If there are multiple queries, validate each one. If there are errors, fix them and validate again. dont try more than 3 times, if it fails third time, return the error.
-  expected_output: >
-    the outputs of the validated SQL queries for analysis, or an error message if validation fails.
-  agent: sql_validator
+    Validated SQL query results ready for analysis, or error message if validation fails.
+  agent: sql_parser_validator
 
 summarize_answer:
   description: >
-    Analyse and Summarize the SQL results into a human-readable answer that aligns with the original question which was : {question}. The currency should be Rupees (₹) and the answer should be formatted accordingly. if there is error, summarize the sql error you are facing.
+    Generate a human-readable answer from SQL results that addresses the original question: {question}
   expected_output: >
-    A natural language explanation of the result using currency formatting and relevant insights or the error that you are getting.
+    Natural language explanation with proper currency formatting (₹) and relevant insights.
   agent: answer_synthesizer
   output_file: final_answer.md

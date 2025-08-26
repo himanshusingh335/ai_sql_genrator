@@ -12,8 +12,11 @@ class SQLiteQueryToolInput(BaseModel):
 class SQLiteQueryTool(BaseTool):
     name: str = "Execute SQLite SQL Query"
     description: str = (
-        "Executes a valid SQLite SQL query on the budget.db database and returns the result as a JSON list. "
-        "It should only be used after validating the query is syntactically and semantically correct."
+        "Executes SQLite queries on the budget database and returns structured results. "
+        "Use this tool to run validated SQL queries and retrieve actual data for analysis. "
+        "Ideal for testing query correctness, fetching budget/spending data, and getting results for user questions. "
+        "Works with SELECT, INSERT, UPDATE, DELETE operations. "
+        "Returns success with data array or error with diagnostic information."
     )
     args_schema: Type[BaseModel] = SQLiteQueryToolInput
 

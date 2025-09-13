@@ -7,7 +7,7 @@ from ai_sql_genrator.crew import AiSqlGenrator
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
-isProduction = False  # Change to False to run in terminal
+isProduction = True  # Change to False to run in terminal
 
 # Initialize Flask app
 app = Flask(__name__)

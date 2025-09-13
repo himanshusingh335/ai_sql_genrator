@@ -10,6 +10,6 @@ summarize_answer:
   description: >
     Generate a human-readable answer from SQL results that addresses the original question: {question}
   expected_output: >
-    Natural language explanation with proper currency formatting (₹) and relevant insights.
+    Natural language explanation with proper currency formatting (₹) and relevant insights. Keep it concise and focused on the user's query. use tabular structure for presenting data when applicable. No additional analysis or commentary is needed.
   agent: answer_synthesizer
   output_file: final_answer.md
